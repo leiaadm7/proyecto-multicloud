@@ -3,95 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CloudPulse - Consola de Monitoreo Premium</title>
+    <title>CloudPulse Tech - Consola Multicloud</title>
     <style>
         :root {
-            --bg-principal: #fff1f2; 
-            --bg-tarjeta: #ffffff;    
-            --borde: #ffe4e6;        
-            --rosa-destacado: #db2777;
-            --rosa-medio: #f472b6;     
-            --texto-principal: #3f3f46;
-            --texto-secundario: #71717a;
+            --pink-primary: #ff66b2;
+            --pink-light: #ffe6f2;
+            --pink-dark: #cc0066;
+            --bg-dark: #121212;
+            --surface-dark: #1e1e1e;
+            --text-light: #ffffff;
+            --text-muted: #b3b3b3;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-principal); color: var(--texto-principal); padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        header { text-align: center; margin-bottom: 50px; max-width: 600px; }
-        header h1 { color: var(--rosa-destacado); font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
-        header p { color: var(--texto-secundario); font-size: 1.1rem; font-weight: 500; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1000px; width: 100%; margin-bottom: 50px; }
-        .card { background: var(--bg-tarjeta); border: 1px solid var(--borde); padding: 25px; border-radius: 16px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(219, 39, 119, 0.04); }
-        .card:hover { transform: translateY(-4px); border-color: var(--rosa-medio); box-shadow: 0 10px 25px rgba(219, 39, 119, 0.08); }
-        .card h3 { color: var(--texto-secundario); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .metric { font-size: 2.4rem; font-weight: 700; color: var(--rosa-destacado); }
-        .container-form { background: var(--bg-tarjeta); border: 1px solid var(--borde); padding: 40px; border-radius: 20px; max-width: 550px; width: 100%; box-shadow: 0 10px 30px rgba(219, 39, 119, 0.05); }
-        .container-form h2 { margin-bottom: 25px; font-size: 1.5rem; font-weight: 700; color: var(--texto-principal); border-left: 4px solid var(--rosa-destacado); padding-left: 12px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: var(--texto-secundario); font-size: 0.9rem; font-weight: 600; }
-        input, textarea { width: 100%; padding: 12px 16px; background: #ffffff; border: 1px solid var(--borde); border-radius: 10px; color: var(--texto-principal); font-size: 0.95rem; transition: all 0.2s; }
-        input:focus, textarea:focus { border-color: var(--rosa-destacado); outline: none; box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1); }
-        button { width: 100%; padding: 14px; background: var(--rosa-destacado); border: none; border-radius: 10px; color: white; font-weight: 700; cursor: pointer; font-size: 1rem; transition: all 0.2s; margin-top: 10px; }
-        button:hover { background: #be185d; transform: scale(1.01); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .console-container {
+            background-color: var(--surface-dark);
+            border: 2px solid var(--pink-primary);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(255, 102, 178, 0.2);
+            overflow: hidden;
+        }
+
+        .console-header {
+            background-color: #2a2a2a;
+            border-bottom: 2px solid var(--pink-primary);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .console-title {
+            color: var(--pink-primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .console-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .console-body {
+            padding: 30px 20px;
+        }
+
+        .welcome-text {
+            color: var(--pink-light);
+            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: var(--pink-primary);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 12px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--pink-primary);
+            box-shadow: 0 0 8px rgba(255, 102, 178, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: var(--pink-primary);
+            color: var(--text-light);
+            border: none;
+            border-radius: 4px;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--pink-dark);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>CloudPulse Tech</h1>
-        <p>Consola de Monitoreo e Infraestructura Multicloud Desacoplada</p>
-    </header>
-
-    <div class="grid">
-        <div class="card">
-            <h3>Carga de CPU</h3>
-            <div class="metric">28.4%</div>
-        </div>
-        <div class="card">
-            <h3>Latencia de Red</h3>
-            <div class="metric">12 ms</div>
-        </div>
-        <div class="card">
-            <h3>Servicios Activos</h3>
-            <div class="metric">36 / 36</div>
-        </div>
-    </div>
-
-    <div class="container-form">
-        <h2>Registro de Acceso a la Beta</h2>
-        <form id="contactForm">
-            <div class="form-group">
-                <label for="nombre">Nombre Completo</label>
-                <input type="text" id="nombre" placeholder="Ej. Tu Nombre" required>
+    <div class="console-container">
+        <div class="console-header">
+            <div class="console-title">CLOUDPULSE_TECH // ACCESO_BETA</div>
+            <div class="console-buttons">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
             </div>
-            <div class="form-group">
-                <label for="correo">Correo Electrónico</label>
-                <input type="email" id="correo" placeholder="ejemplo@inacapmail.cl" required>
-            </div>
-            <div class="form-group">
-                <label for="mensaje">Breve Descripción del Caso de Uso</label>
-                <textarea id="mensaje" rows="4" placeholder="¿Para qué vas a usar la consola?" required></textarea>
-            </div>
-            <button type="submit">Solicitar Acceso</button>
-        </form>
+        </div>
+        
+        <div class="console-body">
+            <p class="welcome-text">Solicita tu token de acceso para la Consola de Monitoreo MultiCloud de CloudPulse.</p>
+            
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre de Operador</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Leia">
+                </div>
+                
+                <div class="form-group">
+                    <label for="correo">Correo Institucional / Destino</label>
+                    <input type="email" id="correo" required placeholder="Ej: operador@matiasdeveloper.studio">
+                </div>
+                
+                <div class="form-group">
+                    <label for="mensaje">Justificación del Nodo de Monitoreo</label>
+                    <textarea id="mensaje" required placeholder="Escribe aquí los motivos o detalles de la solicitud de acceso..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Solicitar Acceso</button>
+            </form>
+        </div>
     </div>
 
     <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('nombre').value.trim();
-            const correo = document.getElementById('correo').value.trim();
-            const mensaje = document.getElementById('mensaje').value.trim();
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const nombre = document.getElementById('nombre').value.trim();
+        const correo = document.getElementById('correo').value.trim();
+        const mensaje = document.getElementById('mensaje').value.trim();
 
-            console.log("=== [INFO] VALIDACIÓN LOCAL EXITOSA ===");
-            console.log("-> Nombre:", nombre);
-            console.log("-> Correo:", correo);
-            console.log("-> Mensaje:", mensaje);
-            console.log("=======================================");
+        const datos = {
+            nombre: nombre,
+            correo: correo,
+            mensaje: mensaje
+        };
 
-            alert("¡Validación exitosa! Tu consola está lista para conectar la API en la próxima actividad.");
-            this.reset();
+        fetch('https://api-cloudpulse.onrender.com/api/registrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === "exito") {
+                alert("¡Solicitud enviada con éxito! Tus datos se guardaron en la base de datos multicloud.");
+                document.getElementById('contactForm').reset();
+            } else {
+                alert("Hubo un problema en el servidor al intentar guardar.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("No se pudo conectar con el backend de Render.");
         });
+    });
     </script>
+
 </body>
 </html>
