@@ -6,92 +6,463 @@
     <title>CloudPulse - Consola de Monitoreo Premium</title>
     <style>
         :root {
-            --bg-principal: #fff1f2; 
-            --bg-tarjeta: #ffffff;    
-            --borde: #ffe4e6;        
-            --rosa-destacado: #db2777;
-            --rosa-medio: #f472b6;     
-            --texto-principal: #3f3f46;
-            --texto-secundario: #71717a;
+            --bg-principal: #fff6fa;
+            --bg-tarjeta: rgba(255, 255, 255, 0.82);
+            --borde: rgba(236, 72, 153, 0.14);
+            --acento: #db2777;
+            --acento-suave: #f472b6;
+            --acento-profundo: #9d174d;
+            --texto-principal: #2f1f2a;
+            --texto-secundario: #6f5b67;
+            --sombra: 0 24px 60px rgba(190, 24, 93, 0.12);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-principal); color: var(--texto-principal); padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        header { text-align: center; margin-bottom: 50px; max-width: 600px; }
-        header h1 { color: var(--rosa-destacado); font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
-        header p { color: var(--texto-secundario); font-size: 1.1rem; font-weight: 500; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1000px; width: 100%; margin-bottom: 50px; }
-        .card { background: var(--bg-tarjeta); border: 1px solid var(--borde); padding: 25px; border-radius: 16px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(219, 39, 119, 0.04); }
-        .card:hover { transform: translateY(-4px); border-color: var(--rosa-medio); box-shadow: 0 10px 25px rgba(219, 39, 119, 0.08); }
-        .card h3 { color: var(--texto-secundario); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .metric { font-size: 2.4rem; font-weight: 700; color: var(--rosa-destacado); }
-        .container-form { background: var(--bg-tarjeta); border: 1px solid var(--borde); padding: 40px; border-radius: 20px; max-width: 550px; width: 100%; box-shadow: 0 10px 30px rgba(219, 39, 119, 0.05); }
-        .container-form h2 { margin-bottom: 25px; font-size: 1.5rem; font-weight: 700; color: var(--texto-principal); border-left: 4px solid var(--rosa-destacado); padding-left: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, 'Segoe UI', system-ui, sans-serif; }
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(244, 114, 182, 0.26), transparent 24%),
+                radial-gradient(circle at top right, rgba(219, 39, 119, 0.12), transparent 22%),
+                radial-gradient(circle at 20% 80%, rgba(252, 165, 165, 0.16), transparent 18%),
+                var(--bg-principal);
+            color: var(--texto-principal);
+            padding: 42px 20px 56px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+            mix-blend-mode: screen;
+        }
+        main { width: 100%; max-width: 1180px; }
+        header {
+            text-align: left;
+            margin: 0 auto 30px;
+            max-width: 1180px;
+            padding: 6px 2px 0;
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 18px;
+            align-items: end;
+        }
+        .hero-copy { max-width: 760px; }
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            margin-bottom: 16px;
+            border-radius: 999px;
+            color: var(--acento-profundo);
+            background: rgba(255, 255, 255, 0.62);
+            border: 1px solid rgba(219, 39, 119, 0.12);
+            box-shadow: var(--sombra);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        header h1 { color: var(--acento-profundo); font-size: clamp(2.45rem, 5vw, 4.35rem); font-weight: 900; letter-spacing: -2px; margin-bottom: 12px; line-height: 0.95; }
+        header p { color: var(--texto-secundario); font-size: 1.05rem; font-weight: 500; line-height: 1.75; max-width: 720px; }
+        .hero-panel {
+            justify-self: stretch;
+            background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(252, 231, 243, 0.62));
+            border: 1px solid rgba(219, 39, 119, 0.12);
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: var(--sombra);
+            backdrop-filter: blur(16px);
+        }
+        .hero-panel-label { color: var(--texto-secundario); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 10px; }
+        .hero-panel-value { font-size: 2rem; font-weight: 900; color: var(--acento); line-height: 1.05; }
+        .hero-panel-note { margin-top: 10px; color: var(--texto-secundario); font-size: 0.92rem; line-height: 1.5; }
+        .status-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 30px;
+            color: var(--texto-secundario);
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+        }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.68);
+            border: 1px solid rgba(219, 39, 119, 0.12);
+            border-radius: 999px;
+            box-shadow: var(--sombra);
+            backdrop-filter: blur(12px);
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #c084fc; box-shadow: 0 0 0 6px rgba(244, 114, 182, 0.14); }
+        .dot.ok { background: #fb7185; box-shadow: 0 0 0 6px rgba(251, 113, 133, 0.14); }
+        .dot.warn { background: #f59e0b; box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.14); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; width: 100%; margin-bottom: 22px; }
+        .card {
+            background: var(--bg-tarjeta);
+            border: 1px solid var(--borde);
+            padding: 24px;
+            border-radius: 24px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            box-shadow: var(--sombra);
+            backdrop-filter: blur(14px);
+        }
+        .card:hover { transform: translateY(-4px); border-color: rgba(219, 39, 119, 0.28); box-shadow: 0 28px 64px rgba(190, 24, 93, 0.16); }
+        .card h3 { color: var(--acento-profundo); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.7px; margin-bottom: 14px; }
+        .metric { font-size: 2.5rem; font-weight: 900; color: var(--acento); line-height: 1; }
+        .submetric { margin-top: 10px; color: var(--texto-secundario); font-size: 0.95rem; }
+        .wide { grid-column: 1 / -1; }
+        .core-list, .service-list { display: grid; gap: 10px; margin-top: 12px; }
+        .core-item, .service-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 12px 14px;
+            border: 1px solid rgba(219, 39, 119, 0.12);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(252, 231, 243, 0.35));
+            color: var(--texto-secundario);
+        }
+        .core-item strong, .service-item strong { color: var(--texto-principal); }
+        .memory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 12px; }
+        .memory-item {
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(219, 39, 119, 0.12);
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(252, 231, 243, 0.45));
+        }
+        .memory-item span { display: block; color: var(--texto-secundario); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .memory-item strong { font-size: 1.05rem; }
+        .container-form {
+            background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.72));
+            border: 1px solid rgba(219, 39, 119, 0.12);
+            padding: 34px;
+            border-radius: 28px;
+            max-width: 620px;
+            width: 100%;
+            box-shadow: var(--sombra);
+            margin: 34px auto 0;
+            backdrop-filter: blur(16px);
+        }
+        .container-form h2 { margin-bottom: 20px; font-size: 1.45rem; font-weight: 900; color: var(--texto-principal); border-left: 4px solid var(--acento); padding-left: 12px; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; color: var(--texto-secundario); font-size: 0.9rem; font-weight: 600; }
-        input, textarea { width: 100%; padding: 12px 16px; background: #ffffff; border: 1px solid var(--borde); border-radius: 10px; color: var(--texto-principal); font-size: 0.95rem; transition: all 0.2s; }
-        input:focus, textarea:focus { border-color: var(--rosa-destacado); outline: none; box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1); }
-        button { width: 100%; padding: 14px; background: var(--rosa-destacado); border: none; border-radius: 10px; color: white; font-weight: 700; cursor: pointer; font-size: 1rem; transition: all 0.2s; margin-top: 10px; }
-        button:hover { background: #be185d; transform: scale(1.01); }
+        input, textarea {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(219, 39, 119, 0.14);
+            border-radius: 14px;
+            color: var(--texto-principal);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--acento);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(219, 39, 119, 0.12);
+            transform: translateY(-1px);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--acento), var(--acento-suave));
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 14px 30px rgba(219, 39, 119, 0.22);
+        }
+        button:hover { transform: translateY(-1px); box-shadow: 0 18px 34px rgba(219, 39, 119, 0.28); }
+        button:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .feedback { margin-top: 16px; font-size: 0.95rem; color: var(--texto-secundario); min-height: 24px; }
+        .error { color: #be123c; }
+        .success { color: #9f1239; }
+        @media (max-width: 640px) {
+            body { padding: 24px 14px 42px; }
+            header h1 { letter-spacing: -1px; }
+            header { grid-template-columns: 1fr; text-align: left; }
+            .hero-panel { order: -1; }
+            .container-form { padding: 24px; }
+            .card { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>CloudPulse Tech</h1>
-        <p>Consola de Monitoreo e Infraestructura Multicloud Desacoplada</p>
-    </header>
+    <main>
+        <header>
+            <div class="hero-copy">
+                <div class="hero-kicker">CloudPulse Monitoring Suite</div>
+                <h1>CloudPulse Tech</h1>
+                <p>Monitoreo en tiempo real de CPU, memoria, latencia y servicios desde una sola consola.</p>
+            </div>
+            <div class="hero-panel">
+                <div class="hero-panel-label">Estado general</div>
+                <div class="hero-panel-value" id="heroMetric">--%</div>
+                <div class="hero-panel-note">Carga total del sistema obtenida desde el backend conectado.</div>
+            </div>
+        </header>
 
-    <div class="grid">
-        <div class="card">
-            <h3>Carga de CPU</h3>
-            <div class="metric">28.4%</div>
+        <div class="status-bar">
+            <span class="pill"><span id="connectionDot" class="dot"></span><span id="connectionStatus">Conectando al backend...</span></span>
+            <span class="pill">Fuente: https://backend-xaya.onrender.com/metrics</span>
+            <span class="pill">Actualización automática cada 5 s</span>
         </div>
-        <div class="card">
-            <h3>Latencia de Red</h3>
-            <div class="metric">12 ms</div>
-        </div>
-        <div class="card">
-            <h3>Servicios Activos</h3>
-            <div class="metric">36 / 36</div>
-        </div>
-    </div>
 
-    <div class="container-form">
-        <h2>Registro de Acceso a la Beta</h2>
-        <form id="contactForm">
-            <div class="form-group">
-                <label for="nombre">Nombre Completo</label>
-                <input type="text" id="nombre" placeholder="Ej. Tu Nombre" required>
+        <div class="grid">
+            <div class="card">
+                <h3>Carga de CPU total</h3>
+                <div class="metric" id="cpuPercent">--%</div>
+                <div class="submetric" id="cpuSummary">Esperando datos</div>
             </div>
-            <div class="form-group">
-                <label for="correo">Correo Electrónico</label>
-                <input type="email" id="correo" placeholder="ejemplo@inacapmail.cl" required>
+            <div class="card">
+                <h3>Latencia de red</h3>
+                <div class="metric" id="networkLatency">--</div>
+                <div class="submetric">Tiempo de respuesta reportado por el backend</div>
             </div>
-            <div class="form-group">
-                <label for="mensaje">Breve Descripción del Caso de Uso</label>
-                <textarea id="mensaje" rows="4" placeholder="¿Para qué vas a usar la consola?" required></textarea>
+            <div class="card">
+                <h3>Servicios activos</h3>
+                <div class="metric" id="servicesCount">--</div>
+                <div class="submetric" id="servicesSummary">Procesos o servicios detectados</div>
             </div>
-            <button type="submit">Solicitar Acceso</button>
-        </form>
-    </div>
+
+            <div class="card wide">
+                <h3>CPU por núcleo</h3>
+                <div class="core-list" id="cpuPerCore"></div>
+            </div>
+
+            <div class="card wide">
+                <h3>Memoria</h3>
+                <div class="memory-grid" id="memoryGrid"></div>
+            </div>
+
+            <div class="card wide">
+                <h3>Servicios</h3>
+                <div class="service-list" id="servicesList"></div>
+            </div>
+        </div>
+
+        <div class="container-form">
+            <h2>Registro de Acceso a la Beta</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" placeholder="Ej. Tu Nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" placeholder="ejemplo@inacapmail.cl" required>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje">Breve Descripción del Caso de Uso</label>
+                    <textarea id="mensaje" rows="4" placeholder="¿Para qué vas a usar la consola?" required></textarea>
+                </div>
+                <button type="submit">Solicitar Acceso</button>
+            </form>
+            <div id="formFeedback" class="feedback"></div>
+        </div>
+    </main>
 
     <script>
+        const backendUrl = 'https://backend-xaya.onrender.com/metrics';
+        const metricsUrl = window.location.protocol === 'file:' ? null : '/metrics';
+
+        const elements = {
+            connectionDot: document.getElementById('connectionDot'),
+            connectionStatus: document.getElementById('connectionStatus'),
+            heroMetric: document.getElementById('heroMetric'),
+            cpuPercent: document.getElementById('cpuPercent'),
+            cpuSummary: document.getElementById('cpuSummary'),
+            networkLatency: document.getElementById('networkLatency'),
+            servicesCount: document.getElementById('servicesCount'),
+            servicesSummary: document.getElementById('servicesSummary'),
+            cpuPerCore: document.getElementById('cpuPerCore'),
+            memoryGrid: document.getElementById('memoryGrid'),
+            servicesList: document.getElementById('servicesList'),
+            formFeedback: document.getElementById('formFeedback')
+        };
+
+        function formatValue(value) {
+            if (value === null || value === undefined || value === '') {
+                return 'N/D';
+            }
+            return value;
+        }
+
+        function normalizeNumber(value, decimals = 1) {
+            if (typeof value !== 'number' || Number.isNaN(value)) {
+                return null;
+            }
+            return value.toFixed(decimals);
+        }
+
+        function renderCpuPerCore(cpuPerCore) {
+            if (!Array.isArray(cpuPerCore) || cpuPerCore.length === 0) {
+                elements.cpuPerCore.innerHTML = '<div class="core-item"><strong>Sin datos</strong><span>El backend no reportó núcleos</span></div>';
+                return;
+            }
+
+            elements.cpuPerCore.innerHTML = cpuPerCore
+                .map((value, index) => {
+                    const percentage = normalizeNumber(value);
+                    return `
+                        <div class="core-item">
+                            <strong>Núcleo ${index + 1}</strong>
+                            <span>${percentage === null ? 'N/D' : `${percentage}%`}</span>
+                        </div>
+                    `;
+                })
+                .join('');
+        }
+
+        function renderMemory(memory) {
+            const entries = memory && typeof memory === 'object' ? Object.entries(memory) : [];
+
+            if (entries.length === 0) {
+                elements.memoryGrid.innerHTML = '<div class="memory-item"><strong>Sin datos de memoria</strong></div>';
+                return;
+            }
+
+            const selectedKeys = ['total', 'available', 'used', 'percent', 'free'];
+            const prioritizedEntries = [
+                ...selectedKeys.filter((key) => key in memory).map((key) => [key, memory[key]]),
+                ...entries.filter(([key]) => !selectedKeys.includes(key)).slice(0, 4)
+            ];
+
+            elements.memoryGrid.innerHTML = prioritizedEntries
+                .map(([key, value]) => {
+                    const displayValue = typeof value === 'number' ? value.toLocaleString('es-CL') : String(formatValue(value));
+                    return `
+                        <div class="memory-item">
+                            <span>${key.replaceAll('_', ' ')}</span>
+                            <strong>${displayValue}</strong>
+                        </div>
+                    `;
+                })
+                .join('');
+        }
+
+        function renderServices(services) {
+            if (!Array.isArray(services) || services.length === 0) {
+                elements.servicesList.innerHTML = '<div class="service-item"><strong>Sin servicios</strong><span>El backend no reportó procesos</span></div>';
+                elements.servicesCount.textContent = '0';
+                elements.servicesSummary.textContent = 'No hay servicios disponibles';
+                return;
+            }
+
+            elements.servicesCount.textContent = String(services.length);
+            elements.servicesSummary.textContent = `${services.length} servicios detectados`;
+
+            elements.servicesList.innerHTML = services.slice(0, 12).map((service) => {
+                const name = service.display_name || service.name || 'Servicio sin nombre';
+                const status = formatValue(service.status);
+                const pid = service.pid !== undefined && service.pid !== null ? `PID ${service.pid}` : 'PID N/D';
+                const username = service.username ? String(service.username) : 'Usuario N/D';
+
+                return `
+                    <div class="service-item">
+                        <div>
+                            <strong>${name}</strong><br>
+                            <span>${pid} · ${username}</span>
+                        </div>
+                        <span>${status}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function setConnectionState(state, message) {
+            elements.connectionDot.className = `dot ${state}`;
+            elements.connectionStatus.textContent = message;
+        }
+
+        async function loadMetrics() {
+            if (!metricsUrl) {
+                setConnectionState('warn', 'Abre esta página desde http://localhost:3000 para cargar métricas');
+                elements.formFeedback.textContent = 'Chrome bloquea las peticiones desde file://. Abre la app con npm run start y entra a http://localhost:3000.';
+                elements.formFeedback.className = 'feedback error';
+                return;
+            }
+
+            setConnectionState('warn', 'Actualizando métricas...');
+
+            try {
+                const response = await fetch(metricsUrl, { method: 'GET' });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                const backendError = Boolean(data.backend_error);
+
+                const cpuPercent = normalizeNumber(data.cpu_percent);
+                elements.cpuPercent.textContent = cpuPercent === null ? '--%' : `${cpuPercent}%`;
+                elements.heroMetric.textContent = cpuPercent === null ? '--%' : `${cpuPercent}%`;
+                elements.cpuSummary.textContent = Array.isArray(data.cpu_per_core)
+                    ? `${data.cpu_per_core.length} núcleos reportados`
+                    : 'Sin detalle de núcleos';
+
+                const latency = normalizeNumber(data.network_latency_ms, 0);
+                elements.networkLatency.textContent = latency === null ? 'N/D' : `${latency} ms`;
+
+                renderCpuPerCore(data.cpu_per_core);
+                renderMemory(data.memory);
+                renderServices(data.services);
+
+                if (backendError) {
+                    setConnectionState('warn', 'El backend no respondió; mostrando estado degradado');
+                    elements.formFeedback.textContent = 'No fue posible contactar al backend. La interfaz sigue activa con valores vacíos.';
+                    elements.formFeedback.className = 'feedback error';
+                } else {
+                    setConnectionState('ok', `Conectado a ${backendUrl}`);
+                    elements.formFeedback.textContent = '';
+                    elements.formFeedback.className = 'feedback';
+                }
+            } catch (error) {
+                console.error('No fue posible cargar las métricas:', error);
+                setConnectionState('warn', 'No se pudo conectar al backend');
+                elements.formFeedback.textContent = `No se pudieron cargar las métricas desde ${backendUrl}.`;
+                elements.formFeedback.className = 'feedback error';
+            }
+        }
+
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const nombre = document.getElementById('nombre').value.trim();
             const correo = document.getElementById('correo').value.trim();
             const mensaje = document.getElementById('mensaje').value.trim();
 
-            console.log("=== [INFO] VALIDACIÓN LOCAL EXITOSA ===");
-            console.log("-> Nombre:", nombre);
-            console.log("-> Correo:", correo);
-            console.log("-> Mensaje:", mensaje);
-            console.log("=======================================");
+            console.log('=== [INFO] VALIDACIÓN LOCAL EXITOSA ===');
+            console.log('-> Nombre:', nombre);
+            console.log('-> Correo:', correo);
+            console.log('-> Mensaje:', mensaje);
+            console.log('=======================================');
 
-            alert("¡Validación exitosa! Tu consola está lista para conectar la API en la próxima actividad.");
+            elements.formFeedback.textContent = '¡Validación exitosa!';
+            elements.formFeedback.className = 'feedback success';
             this.reset();
         });
+
+        loadMetrics();
+        if (metricsUrl) {
+            setInterval(loadMetrics, 5000);
+        }
     </script>
 </body>
 </html>
