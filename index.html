@@ -280,7 +280,8 @@
 
     <script>
         const backendUrl = 'https://backend-xaya.onrender.com/metrics';
-        const metricsUrl = window.location.protocol === 'file:' ? null : '/metrics';
+        const isLocalHost = ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+        const metricsUrl = window.location.protocol === 'file:' ? null : (isLocalHost ? '/metrics' : backendUrl);
 
         const elements = {
             connectionDot: document.getElementById('connectionDot'),
